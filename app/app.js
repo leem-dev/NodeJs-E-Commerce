@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 // routes
 app.use("/api/v1/users/", userRoutes);
-app.use("/api/v1/product/", productsRoute);
+app.use("/api/v1/products/", productsRoute);
 // err middleware
 app.use(notFound);
 app.use(globalErrHandler);

@@ -17,6 +17,7 @@ export const createProductCtrl = asyncHandler(async (req, res) => {
     price,
     totalQty,
   } = req.body;
+
   // if product already exist
   const productExists = await Product.findOne({ name });
   if (productExists) {
@@ -42,5 +43,17 @@ export const createProductCtrl = asyncHandler(async (req, res) => {
     status: "success",
     message: "Product created successfully",
     product,
+  });
+});
+
+// @desc      Get all products
+// @route     Get /api/v1/products
+// @access    Public
+
+export const getProductsCtrl = asyncHandler(async (req, res) => {
+  const products = await Product.find();
+  res.json({
+    status: "success",
+    products,
   });
 });
