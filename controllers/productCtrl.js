@@ -101,11 +101,43 @@ export const getProductsCtrl = asyncHandler(async (req, res) => {
     });
   }
 
+  // pagination
+  // page
+  const page = parseInt(safeQuery.page) ? parseInt(safeQuery.page) : 1;
+  // limit
+  const limit = parseInt(safeQuery.limit) ? parseInt(safeQuery.limit) : 10;
+  // startIdx
+  const startIndex = (page - 1) * limit;
+  // endIdx
+  const endIndex = page * limit;
+  // total records
+  const total = await Product.countDocuments();
+
+  productQuery = productQuery.skip(startIndex).limit(limit);
+
+  //  pagination results
+  const pagination = {};
+  if (endIndex < total) {
+    pagination.next = {
+      page: page + 1,
+      limit,
+    };
+  }
+  if (startIndex > 0) {
+    pagination.next = {
+      page: page - 1,
+      limit,
+    };
+  }
   // await the query
   const products = await productQuery;
 
   res.json({
     status: "success",
+    total,
+    results: products.length,
+    pagination,
+    message: "Product fetched successfully",
     products,
   });
 });

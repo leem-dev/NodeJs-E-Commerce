@@ -18,3 +18,5 @@ APPLICATION FEATURES
 API testing - POSTMAN
 
 Schema is a blueprint of creating documents out of a model
+
+- PAGINATION: Simply means that retaining some amount of record per request or per page
