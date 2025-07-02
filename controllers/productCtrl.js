@@ -54,7 +54,6 @@ export const getProductsCtrl = asyncHandler(async (req, res) => {
   // query
   let productQuery = Product.find();
   const safeQuery = Object.assign({}, req.query);
-  console.log(safeQuery);
 
   // find user by name
   if (safeQuery.name) {
@@ -139,5 +138,83 @@ export const getProductsCtrl = asyncHandler(async (req, res) => {
     pagination,
     message: "Product fetched successfully",
     products,
+  });
+});
+
+// @desc      Get single product
+// @route     GET /api/products/:id
+// @access    Public
+
+export const getProductCtrl = asyncHandler(async (req, res) => {
+  const safeQuery = Object.assign({}, req.params);
+  const product = await Product.findById(safeQuery.id);
+
+  if (!product) {
+    throw new Error("Product not found");
+  }
+
+  res.json({
+    status: "success",
+    message: "Product fetched successfully",
+    product,
+  });
+});
+
+// @desc      update product
+// @route     GET /api/products/:id/update
+// @access    Private/Admin
+
+export const updateProductCtrl = asyncHandler(async (req, res) => {
+  const {
+    name,
+    description,
+    brand,
+    category,
+    sizes,
+    colors,
+    user,
+    price,
+    totalQty,
+  } = req.body;
+
+  const safeQuery = Object.assign({}, req.params);
+  console.log(safeQuery.id);
+  // update
+  const product = await Product.findByIdAndUpdate(
+    safeQuery.id,
+    {
+      name,
+      description,
+      brand,
+      category,
+      sizes,
+      colors,
+      user,
+      price,
+      totalQty,
+    },
+    {
+      new: true,
+    }
+  );
+
+  res.json({
+    status: "success",
+    message: "Product updated successfully",
+    product,
+  });
+});
+
+// @desc      delete product
+// @route     DELETE /api/products/:id/update
+// @access    Private/Admin
+
+export const deleteProductCtrl = asyncHandler(async (req, res) => {
+  const safeQuery = Object.assign({}, req.params);
+  await Product.findByIdAndDelete(safeQuery.id);
+
+  res.json({
+    status: "success",
+    message: "Product deleted successfully",
   });
 });
